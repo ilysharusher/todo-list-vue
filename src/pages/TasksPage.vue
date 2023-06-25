@@ -12,6 +12,15 @@ onMounted(async () => {
 
 const uncompletedTasks = computed(() => tasks.value.filter((task) => !task.is_completed));
 const completedTasks = computed(() => tasks.value.filter((task) => task.is_completed));
+
+const showCompletedButton = computed(
+    () => completedTasks.value.length && uncompletedTasks.value.length
+);
+
+const showCompletedTasks = ref(true);
+const completedTaskIsVisible = computed(
+    () => uncompletedTasks.value.length === 0 || completedTasks.value.length
+);
 </script>
 
 <template>
@@ -27,7 +36,19 @@ const completedTasks = computed(() => tasks.value.filter((task) => task.is_compl
                         />
                     </div>
                     <Tasks :tasks="uncompletedTasks" />
-                    <Tasks :tasks="completedTasks" />
+
+                    <div class="my-3 text-center">
+                        <button
+                            @click="showCompletedTasks = !showCompletedTasks"
+                            v-show="showCompletedButton"
+                            class="btn btn-secondary btn-lg"
+                        >
+                            <span v-if="showCompletedTasks === false">Show completed tasks</span>
+                            <span v-if="showCompletedTasks === true">Hide completed tasks</span>
+                        </button>
+                    </div>
+
+                    <Tasks :show="completedTaskIsVisible && showCompletedTasks" :tasks="completedTasks" />
                 </div>
             </div>
         </div>
