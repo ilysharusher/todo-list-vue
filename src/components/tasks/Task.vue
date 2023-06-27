@@ -1,7 +1,6 @@
 <script setup>
 import { defineProps, ref } from 'vue';
-import IconPencil from '@/components/icons/IconPencil.vue';
-import IconTrash from '@/components/icons/IconTrash.vue';
+import TaskActions from '@/components/tasks/TaskActions.vue';
 
 const props = defineProps({
     task: {
@@ -10,7 +9,26 @@ const props = defineProps({
     }
 });
 
-const completedTask = ref(props.task.is_completed ? 'completed' : '') ;
+const completedTask = ref(props.task.is_completed ? 'completed' : '');
+
+const isEditing = ref(false);
+const taskText = ref(props.task.name);
+
+/*const updateTask = async () => {
+    if (!taskText.value.trim()) {
+        return;
+    }
+
+    const { data: updatedTask } = await updateTask(props.task.id, {
+        name: taskText.value,
+        is_completed: props.task.is_completed
+    });
+
+    props.task.name = updatedTask.data.name;
+    isEditing.value = false;
+};*/
+
+const vFocus = (el) => el.focus();
 </script>
 
 <template>
@@ -23,25 +41,26 @@ const completedTask = ref(props.task.is_completed ? 'completed' : '') ;
                 type="checkbox"
             />
             <div
+                @dblclick="isEditing = true"
                 :class="completedTask"
                 class="ms-2 flex-grow-1"
                 title="Double click the text to edit or remove"
             >
-                <!-- <div class="relative">
-                    <input class="editable-task" type="text" />
-                </div> -->
-                <span>{{ props.task.name }}</span>
+                <div v-if="isEditing" class="relative">
+                    <input
+                        @keyup.esc="isEditing = false"
+                        v-model="taskText"
+                        class="editable-task"
+                        type="text"
+                        placeholder="Edit task"
+                        v-focus
+                    />
+                </div>
+                <span v-else>{{ props.task.name }}</span>
             </div>
             <!--                                    <div class="task-date">24 Feb 12:00</div>-->
         </div>
-        <div class="task-actions">
-            <button class="btn btn-sm btn-circle btn-outline-secondary me-1">
-                <IconPencil />
-            </button>
-            <button class="btn btn-sm btn-circle btn-outline-danger">
-                <IconTrash />
-            </button>
-        </div>
+        <TaskActions @task-updated="isEditing = true" :task="props.task" v-show="!isEditing" />
     </li>
 </template>
 
