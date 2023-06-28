@@ -49,6 +49,12 @@ const taskIsCompleted = async (event) => {
     });
 };
 
+const removeTask = async () => {
+    if (confirm('Are you sure you want to delete this task?')) {
+        emits('task-deleted', props.task.id);
+    }
+};
+
 const vFocus = (el) => el.focus();
 </script>
 
@@ -83,7 +89,12 @@ const vFocus = (el) => el.focus();
             </div>
             <!--                                    <div class="task-date">24 Feb 12:00</div>-->
         </div>
-        <TaskActions @task-updated="isEditing = true" :task="props.task" v-show="!isEditing" />
+        <TaskActions
+            @task-updated="isEditing = true"
+            @task-deleted="removeTask"
+            :task="props.task"
+            v-show="!isEditing"
+        />
     </li>
 </template>
 

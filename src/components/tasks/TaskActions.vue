@@ -3,8 +3,8 @@ import IconPencil from '@/components/icons/IconPencil.vue';
 import IconTrash from '@/components/icons/IconTrash.vue';
 
 const emits = defineEmits({
-    'task-updated': Object,
-    'task-deleted': Number
+    'task-updated': Boolean,
+    'task-deleted': Boolean
 });
 
 const props = defineProps({
@@ -23,7 +23,7 @@ const props = defineProps({
             <IconPencil />
         </button>
         <button
-            @click="emits('task-deleted', props.task.id)"
+            @click="emits('task-deleted', true)"
             class="btn btn-sm btn-circle btn-outline-danger">
             <IconTrash />
         </button>
