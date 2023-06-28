@@ -23,9 +23,15 @@ const completedTaskIsVisible = computed(
     () => uncompletedTasks.value.length === 0 || completedTasks.value.length
 );
 
-const createNewTask = async (newTask) => {
+const handleCreateTask = async (newTask) => {
     const { data: createdTask } = await createTask(newTask);
     tasks.value.unshift(createdTask.data);
+};
+
+const handleUpdateTask = async (updatedTask) => {
+    const { data: updatedTaskData } = await updateTask(updatedTask.id, updatedTask);
+    const currentTask = tasks.value.findIndex((task) => task.id === updatedTaskData.data.id);
+    tasks.value[currentTask] = updatedTaskData.data;
 };
 </script>
 
@@ -34,8 +40,10 @@ const createNewTask = async (newTask) => {
         <div class="container">
             <div class="row">
                 <div class="col-md-8 offset-md-2">
-                    <NewTask @task-created="createNewTask" />
-                    <Tasks :tasks="uncompletedTasks" />
+                    <NewTask @task-created="handleCreateTask" />
+                    <Tasks
+                        @task-updated="handleUpdateTask"
+                        :tasks="uncompletedTasks" />
 
                     <div class="my-3 text-center">
                         <button

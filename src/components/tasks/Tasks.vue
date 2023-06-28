@@ -14,9 +14,14 @@ const props = defineProps({
 </script>
 
 <template>
-    <div v-if='tasks.length && props.show' class="card mt-2">
+    <div v-if="tasks.length && props.show" class="card mt-2">
         <ul class="list-group list-group-flush">
-            <Task v-for="task in props.tasks" :key="task.id" :task="task" />
+            <Task
+                v-for="task in props.tasks"
+                :key="task.id"
+                :task="task"
+                @task-updated="$emit('task-updated', $event)"
+            />
         </ul>
     </div>
 </template>

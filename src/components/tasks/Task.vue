@@ -9,24 +9,31 @@ const props = defineProps({
     }
 });
 
+const emits = defineEmits({
+    'task-updated': Object,
+    'task-deleted': Number
+});
+
 const completedTask = ref(props.task.is_completed ? 'completed' : '');
 
 const isEditing = ref(false);
 const taskText = ref(props.task.name);
 
-/*const updateTask = async () => {
+const updateTask = async () => {
     if (!taskText.value.trim()) {
+        return;
+    } else if (taskText.value === props.task.name) {
+        isEditing.value = false;
         return;
     }
 
-    const { data: updatedTask } = await updateTask(props.task.id, {
-        name: taskText.value,
-        is_completed: props.task.is_completed
+    emits('task-updated', {
+        ...props.task,
+        name: taskText.value
     });
 
-    props.task.name = updatedTask.data.name;
     isEditing.value = false;
-};*/
+};
 
 const vFocus = (el) => el.focus();
 </script>
@@ -48,6 +55,7 @@ const vFocus = (el) => el.focus();
             >
                 <div v-if="isEditing" class="relative">
                     <input
+                        @keyup.enter="updateTask"
                         @keyup.esc="isEditing = false"
                         v-model="taskText"
                         class="editable-task"
