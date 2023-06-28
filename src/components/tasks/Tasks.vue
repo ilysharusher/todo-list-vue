@@ -21,6 +21,7 @@ const props = defineProps({
                 :key="task.id"
                 :task="task"
                 @task-updated="$emit('task-updated', $event)"
+                @task-completed="$emit('task-completed', $event)"
             />
         </ul>
     </div>

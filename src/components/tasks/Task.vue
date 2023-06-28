@@ -11,6 +11,7 @@ const props = defineProps({
 
 const emits = defineEmits({
     'task-updated': Object,
+    'task-completed': Object,
     'task-deleted': Number
 });
 
@@ -41,6 +42,13 @@ const updateTask = async () => {
     isEditing.value = false;
 };
 
+const taskIsCompleted = async (event) => {
+    emits('task-completed', {
+        ...props.task,
+        is_completed: !props.task.is_completed
+    });
+};
+
 const vFocus = (el) => el.focus();
 </script>
 
@@ -48,6 +56,7 @@ const vFocus = (el) => el.focus();
     <li class="list-group-item py-3">
         <div class="d-flex justify-content-start align-items-center">
             <input
+                @change="taskIsCompleted"
                 :class="completedTask"
                 :checked="props.task.is_completed"
                 class="form-check-input mt-0"

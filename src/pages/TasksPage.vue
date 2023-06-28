@@ -33,6 +33,12 @@ const handleUpdateTask = async (updatedTask) => {
     const currentTask = tasks.value.findIndex((task) => task.id === updatedTaskData.data.id);
     tasks.value[currentTask] = updatedTaskData.data;
 };
+
+const handleCompleteTask = async (completedTask) => {
+    const { data: completedTaskData } = await completeTask(completedTask.id, completedTask);
+    const currentTask = tasks.value.findIndex((task) => task.id === completedTaskData.data.id);
+    tasks.value[currentTask] = completedTaskData.data;
+};
 </script>
 
 <template>
@@ -43,6 +49,7 @@ const handleUpdateTask = async (updatedTask) => {
                     <NewTask @task-created="handleCreateTask" />
                     <Tasks
                         @task-updated="handleUpdateTask"
+                        @task-completed="handleCompleteTask"
                         :tasks="uncompletedTasks" />
 
                     <div class="my-3 text-center">
@@ -57,6 +64,8 @@ const handleUpdateTask = async (updatedTask) => {
                     </div>
 
                     <Tasks
+                        @task-updated="handleUpdateTask"
+                        @task-completed="handleCompleteTask"
                         :show="completedTaskIsVisible && showCompletedTasks"
                         :tasks="completedTasks"
                     />
