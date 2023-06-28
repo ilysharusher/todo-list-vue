@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, ref } from 'vue';
+import { defineProps, ref, watch } from 'vue';
 import TaskActions from '@/components/tasks/TaskActions.vue';
 
 const props = defineProps({
@@ -18,6 +18,12 @@ const completedTask = ref(props.task.is_completed ? 'completed' : '');
 
 const isEditing = ref(false);
 const taskText = ref(props.task.name);
+
+watch(isEditing, (value) => {
+    if (value) {
+        taskText.value = props.task.name;
+    }
+});
 
 const updateTask = async () => {
     if (!taskText.value.trim()) {
