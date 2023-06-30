@@ -2,18 +2,18 @@
 import { computed, onMounted, ref } from 'vue';
 import { useTaskStore } from '@/stores/task';
 import { storeToRefs } from 'pinia';
-import { getTasks, createTask, updateTask, deleteTask, completeTask } from '@/http/task-api';
+import { createTask, updateTask, deleteTask, completeTask } from '@/http/task-api';
 import Tasks from '@/components/tasks/Tasks.vue';
 import NewTask from '@/components/tasks/NewTask.vue';
 
 const taskStore = useTaskStore();
 const { completedTasks, uncompletedTasks } = storeToRefs(taskStore);
+const { fetchTasks } = taskStore;
 
 const tasks = ref([]);
 
 onMounted(async () => {
-    const { data } = await getTasks();
-    tasks.value = data.data;
+    await fetchTasks();
 });
 
 const showCompletedButton = computed(
