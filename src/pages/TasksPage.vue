@@ -7,18 +7,14 @@ import Tasks from '@/components/tasks/Tasks.vue';
 import NewTask from '@/components/tasks/NewTask.vue';
 
 const taskStore = useTaskStore();
-const { task } = storeToRefs(taskStore);
+const { completedTasks, uncompletedTasks } = storeToRefs(taskStore);
 
 const tasks = ref([]);
 
 onMounted(async () => {
     const { data } = await getTasks();
     tasks.value = data.data;
-    console.log(task.value);
 });
-
-const uncompletedTasks = computed(() => tasks.value.filter((task) => !task.is_completed));
-const completedTasks = computed(() => tasks.value.filter((task) => task.is_completed));
 
 const showCompletedButton = computed(
     () => completedTasks.value.length && uncompletedTasks.value.length
