@@ -1,14 +1,20 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
+import { useTaskStore } from '@/stores/task';
+import { storeToRefs } from 'pinia';
 import { getTasks, createTask, updateTask, deleteTask, completeTask } from '@/http/task-api';
 import Tasks from '@/components/tasks/Tasks.vue';
 import NewTask from '@/components/tasks/NewTask.vue';
+
+const taskStore = useTaskStore();
+const { task } = storeToRefs(taskStore);
 
 const tasks = ref([]);
 
 onMounted(async () => {
     const { data } = await getTasks();
     tasks.value = data.data;
+    console.log(task.value);
 });
 
 const uncompletedTasks = computed(() => tasks.value.filter((task) => !task.is_completed));
@@ -56,7 +62,8 @@ const handleDeleteTask = async (taskId) => {
                         @task-updated="handleUpdateTask"
                         @task-completed="handleCompleteTask"
                         @task-deleted="handleDeleteTask"
-                        :tasks="uncompletedTasks" />
+                        :tasks="uncompletedTasks"
+                    />
 
                     <div class="my-3 text-center">
                         <button
