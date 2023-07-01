@@ -1,14 +1,10 @@
 import { defineStore } from 'pinia';
 import { getTasks } from '@/http/task-api';
+import { ref, computed } from 'vue';
 
-export const useTaskStore = defineStore('taskStore', {
+/*const old = {
     state: () => ({
-        tasks: [],
-        task: {
-            id: '',
-            name: 'First Task',
-            is_completed: false
-        }
+        tasks: []
     }),
     getters: {
         completedTasks() {
@@ -24,4 +20,23 @@ export const useTaskStore = defineStore('taskStore', {
             this.tasks = data.data;
         }
     }
+};*/
+
+export const useTaskStore = defineStore('taskStore', () => {
+    const tasks = ref([]);
+
+    const completedTasks = computed(() => tasks.value.filter((task) => task.is_completed));
+    const uncompletedTasks = computed(() => tasks.value.filter((task) => !task.is_completed));
+
+    const fetchTasks = async () => {
+        const { data } = await getTasks();
+        tasks.value = data.data;
+    };
+
+    return {
+        tasks,
+        completedTasks,
+        uncompletedTasks,
+        fetchTasks
+    };
 });
