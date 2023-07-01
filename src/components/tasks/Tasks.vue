@@ -1,5 +1,9 @@
 <script setup>
 import Task from '@/components/tasks/Task.vue';
+import { useTaskStore } from '@/stores/task';
+
+const taskStore = useTaskStore();
+const { handleUpdateTask, handleCompleteTask, handleDeleteTask } = taskStore;
 
 const props = defineProps({
     tasks: {
@@ -20,9 +24,9 @@ const props = defineProps({
                 v-for="task in props.tasks"
                 :key="task.id"
                 :task="task"
-                @task-updated="$emit('task-updated', $event)"
-                @task-completed="$emit('task-completed', $event)"
-                @task-deleted="$emit('task-deleted', $event)"
+                @task-updated="handleUpdateTask"
+                @task-completed="handleCompleteTask"
+                @task-deleted="handleDeleteTask"
             />
         </ul>
     </div>

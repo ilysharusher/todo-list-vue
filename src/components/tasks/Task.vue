@@ -42,7 +42,7 @@ const updateTask = async () => {
     isEditing.value = false;
 };
 
-const taskIsCompleted = async (event) => {
+const taskIsCompleted = async () => {
     emits('task-completed', {
         ...props.task,
         is_completed: !props.task.is_completed

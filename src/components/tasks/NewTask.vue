@@ -1,21 +1,21 @@
 <script setup>
-import { defineEmits, reactive } from 'vue';
+import { reactive } from 'vue';
+import { useTaskStore } from '@/stores/task';
 
-const emits = defineEmits({
-    'task-created': Object
-});
+const taskStore = useTaskStore();
+const { handleCreateTask } = taskStore;
 
 const newTask = reactive({
     name: '',
     is_completed: false
 });
 
-const createNewTask = () => {
+const createNewTask = async () => {
     if (!newTask.name.trim()) {
         return;
     }
 
-    emits('task-created', newTask)
+    await handleCreateTask(newTask);
     newTask.name = '';
 };
 </script>
