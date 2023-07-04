@@ -1,6 +1,7 @@
 import TasksPage from '@/pages/TasksPage.vue';
 import LoginPage from '@/pages/LoginPage.vue';
 import SignupPage from '@/pages/SignupPage.vue';
+import SummaryPage from '@/pages/SummaryPage.vue';
 
 const routes = [
     {
@@ -17,6 +18,11 @@ const routes = [
         path: '/tasks/signup',
         name: 'signup',
         component: SignupPage
+    },
+    {
+        path: '/tasks/summary',
+        name: 'summary',
+        component: SummaryPage
     }
 ];
 
