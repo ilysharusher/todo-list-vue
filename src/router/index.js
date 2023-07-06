@@ -7,8 +7,15 @@ const router = createRouter({
     linkActiveClass: 'active'
 });
 
-router.beforeEach((to, from) => {
-    console.log(`${from.fullPath} => ${to.fullPath}`);
+router.beforeEach((to) => {
+    if (to.meta.auth) {
+        return {
+            name: 'login',
+            query: {
+                redirect: to.fullPath
+            }
+        };
+    }
 });
 
 export default router;
